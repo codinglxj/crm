@@ -8,9 +8,11 @@
 
     <!--配置组件扫描器-->
     <context:component-scan base-package="com.bjpowernode.crm.settings.web.controller"/>
+    <context:component-scan base-package="com.bjpowernode.crm.workbench.web.controller"/>
 
     <!--配置注解扫描器，创建全局异常处理类，用来扫描@ControllerAdvice-->
     <context:component-scan base-package="com.bjpowernode.crm.handler"/>
+
 
     <!--开启注解驱动-->
     <mvc:annotation-driven/>

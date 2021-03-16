@@ -25,8 +25,18 @@
         <property name="basePackage"  value="com.bjpowernode.crm.settings.dao"/>
     </bean>
 
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactoryBean"/>
+        <property name="basePackage"  value="com.bjpowernode.crm.workbench.dao"/>
+
+    </bean>
+
     <!--配置组件扫描器-->
-    <context:component-scan base-package="com.bjpowernode.crm.settings.serice"/>
+    <!--扫描settings下的service包-->
+    <context:component-scan base-package="com.bjpowernode.crm.settings.service"/>
+
+    <!--扫描workbench下的service包-->
+    <context:component-scan base-package="com.bjpowernode.crm.workbench.service"/>
     
 
 </beans>

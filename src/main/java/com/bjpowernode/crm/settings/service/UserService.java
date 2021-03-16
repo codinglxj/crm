@@ -1,7 +1,9 @@
-package com.bjpowernode.crm.settings.serice;
+package com.bjpowernode.crm.settings.service;
 
 import com.bjpowernode.crm.exception.LoginException;
 import com.bjpowernode.crm.settings.domain.User;
+
+import java.util.List;
 
 /**
  * @authot : lxj
@@ -9,6 +11,7 @@ import com.bjpowernode.crm.settings.domain.User;
  */
 public interface UserService {
 
+     List<User> getUserList();
     User login(String loginAct, String loginPwd, String ip) throws LoginException;
 }
 

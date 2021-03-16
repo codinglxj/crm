@@ -1,13 +1,14 @@
-package com.bjpowernode.crm.settings.serice.impl;
+package com.bjpowernode.crm.settings.service.impl;
 
 import com.bjpowernode.crm.exception.LoginException;
 import com.bjpowernode.crm.settings.dao.UserDao;
 import com.bjpowernode.crm.settings.domain.User;
-import com.bjpowernode.crm.settings.serice.UserService;
+import com.bjpowernode.crm.settings.service.UserService;
 import com.bjpowernode.crm.utils.DateTimeUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @authot : lxj
@@ -18,6 +19,13 @@ public class UserServiceImpl implements UserService {
 
     @Resource
     UserDao userDao;
+
+    //获取用户全部信息
+    @Override
+    public List<User> getUserList() {
+        return userDao.getUserList();
+    }
+
 
     @Override
     public User login(String loginAct, String loginPwd, String ip) throws LoginException {

@@ -14,6 +14,13 @@
 
     <script type="text/javascript">
         $(function () {
+
+            //使login.jsp始终在顶层窗口中打开
+
+            if(window.top != window){
+                window.top.location = window.top;
+            }
+
             //页面加载完毕后，将用户文本框中的内容清空
             $("#loginAct").html("");
             //页面加载完毕后，让用户的文本框自动获得焦点

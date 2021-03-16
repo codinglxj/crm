@@ -9,4 +9,7 @@
         select * from tbl_user where loginAct = #{act} and loginPwd = #{pwd}
     </select>
 
+    <select id="getUserList" resultType="com.bjpowernode.crm.settings.domain.User">
+        select * from tbl_user;
+    </select>
 </mapper>

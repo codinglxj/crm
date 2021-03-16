@@ -13,5 +13,6 @@
     <!-- sql mapper(sql映射文件)的位置-->
     <mappers>
         <package name="com.bjpowernode.crm.settings.dao"/>
+        <package name="com.bjpowernode.crm.workbench.dao"/>
     </mappers>
 </configuration>
