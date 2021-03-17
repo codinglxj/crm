@@ -77,7 +77,7 @@ public class ActivityController {
         Integer pageSize = Integer.valueOf(pageSizeStr);
 
         //计算出要略过的记录数
-        Integer skipCount = (pageNo -1) * pageSize;
+        Integer skipCount = (pageNo - 1) * pageSize;
         String name = request.getParameter("search-name");
         String owner = request.getParameter("search-owner");
         String startDate = request.getParameter("search-startDate");
@@ -95,6 +95,21 @@ public class ActivityController {
         PaginationVO<Activity> paginationVO = activityService.pageList(map);
         return paginationVO;
 
+
+    }
+
+    @RequestMapping(value = "/delete.do")
+    @ResponseBody
+    public Map<String, Object> delete(HttpServletRequest request) {
+
+        System.out.println("进去删除市场活动的控制器方法中====");
+
+        String[] ids = request.getParameterValues("id");
+        boolean flag = activityService.delete(ids);
+        Map<String, Object> map = new HashMap<>();
+        map.put("success", flag);
+
+        return map;
 
     }
 

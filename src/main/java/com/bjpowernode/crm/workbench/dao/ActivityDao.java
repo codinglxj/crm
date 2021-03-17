@@ -17,4 +17,6 @@ public interface ActivityDao {
     List<Activity> getActivityListByCondition(Map<String, Object> map);
 
     Integer getTotalByCondition(Map<String, Object> map);
+
+    int deleteByIds(String[] ids);
 }

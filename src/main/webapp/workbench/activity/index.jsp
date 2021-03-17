@@ -127,6 +127,72 @@
 
                 pageList(1, 2);
             })
+
+            //为全选的复选框绑定事件，触发全选操作
+            $("#qx").click(function () {
+                $("input[name='xz']").prop("checked", this.checked);
+            })
+
+            //以下这种做法是不行的
+            /* $("input[name=xz]").click(function () {
+                 alert(123)
+             })*/
+
+            /*动态生成的元素，是不能以普通绑定事件的形式来进行操作的
+            语法:
+                $(需要绑定元素的有效的外层元素).on(绑定事件的方式，需要绑定元素的jquery对象，回调函数)*/
+            $("#activityBody").on("click", $("input[name='xu']"), function () {
+                //alert(123);
+                $("#qx").prop("checked", $("input[name='xz']").length == $("input[name='xz']:checked").length);
+            })
+
+            //为市场活动的删除按钮添加事件
+            $("#deleteBtn").click(function () {
+
+                //找到选择了哪些要删除的按钮
+                var $xz = $("input[name='xz']:checked");
+                //判断是选择框中是否有元素被勾选
+                if ($xz.length == 0) {
+
+                    alert("请选择要删除的市场活动");
+
+
+                } else {
+                    if(confirm("是否确定删除")){
+                        var param = "";
+                        for (var i = 0; i < $xz.length; i++) {
+                            var data = $($xz[i]).val();
+                            param += "id=" + data;
+                            if (i < $xz.length - 1) {
+                                param += "&";
+                            }
+
+                        }
+                        //alert(data);
+                        //id=6b&id=60
+                        $.ajax({
+                            url: "workbench/activity/delete.do",
+                            data: param,
+                            urlType: "get",
+                            datType: "json",
+                            success: function (resp) {
+                                if (resp.success) {
+
+
+                                    pageList(1, 2);
+
+                                } else {
+                                    alert("删除市场活动失败");
+                                }
+                            }
+                        })
+                    }
+
+                }
+
+            })
+
+
         });
 
         /*
@@ -145,6 +211,9 @@
 
         * */
         function pageList(pageNo, pageSize) {
+            //每次调用分页查询时，将复选框的√取消掉
+
+            $("#input[name='xz']").prop("checked", false);
 
             //查询前，将隐藏域中保存的信息取出来，重新赋予到搜索框中
             $("#search-name").val($.trim($("#hidden-name").val()));
@@ -179,7 +248,7 @@
                         html += '</tr>';
                     });
                     $("#activityBody").html(html);
-                    var totalPages = Math.ceil(data.total/pageSize);
+                    var totalPages = Math.ceil(data.total / pageSize);
                     //计算总也是
 
                     //数据处理完毕后，结合分页查询，对前端展现分页信息
@@ -197,8 +266,8 @@
                         showRowsInfo: true,
                         showRowsDefaultInfo: true,
                         //该回调函数是在，点击分页组件的时候触发的
-                        onChangePage : function(event, data){
-                            pageList(data.currentPage , data.rowsPerPage);
+                        onChangePage: function (event, data) {
+                            pageList(data.currentPage, data.rowsPerPage);
                         }
                     });
 
@@ -415,7 +484,9 @@
                 <button type="button" class="btn btn-default" data-toggle="modal" data-target="#editActivityModal"><span
                         class="glyphicon glyphicon-pencil"></span> 修改
                 </button>
-                <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除</button>
+                <button type="button" class="btn btn-danger" id="deleteBtn"><span
+                        class="glyphicon glyphicon-minus"></span> 删除
+                </button>
             </div>
 
         </div>
@@ -423,7 +494,7 @@
             <table class="table table-hover">
                 <thead>
                 <tr style="color: #B3B3B3;">
-                    <td><input type="checkbox"/></td>
+                    <td><input type="checkbox" id="qx"/></td>
                     <td>名称</td>
                     <td>所有者</td>
                     <td>开始日期</td>

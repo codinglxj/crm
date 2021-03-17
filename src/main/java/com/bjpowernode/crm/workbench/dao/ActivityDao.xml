@@ -89,5 +89,12 @@
 
     </select>
 
+    <delete id="deleteByIds">
+        delete from tbl_activity where id in
+        <foreach collection="array" item="ids" open="(" close=")" separator=",">
+            #{ids}
+        </foreach>
+    </delete>
+
 
 </mapper>

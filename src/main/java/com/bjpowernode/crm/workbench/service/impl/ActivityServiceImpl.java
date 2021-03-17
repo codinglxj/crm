@@ -3,6 +3,7 @@ package com.bjpowernode.crm.workbench.service.impl;
 import com.bjpowernode.crm.exception.ActivityException;
 import com.bjpowernode.crm.vo.PaginationVO;
 import com.bjpowernode.crm.workbench.dao.ActivityDao;
+import com.bjpowernode.crm.workbench.dao.ActivityRemarkDao;
 import com.bjpowernode.crm.workbench.domain.Activity;
 import com.bjpowernode.crm.workbench.service.ActivityService;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,9 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Resource
     private ActivityDao activityDao;
+
+    @Resource
+    private ActivityRemarkDao activityRemarkDao;
 
 
     //
@@ -45,5 +49,26 @@ public class ActivityServiceImpl implements ActivityService {
         paginationVo.setTotal(total);
         paginationVo.setDataList(dataList);
         return paginationVo;
+    }
+
+
+    @Override
+    public boolean delete(String[] ids) {
+        boolean flag = true;
+
+        //查询出需要删除的备注的数量
+        int count1 = activityRemarkDao.getCountByIds(ids);
+
+        //删除备注后，返回受影响的条数(实际删除的数量)
+        int count2 = activityRemarkDao.deleteByIds(ids);
+        if(count1 != count2){
+            flag = false;
+        }
+        //删除市场活动
+        int count3 = activityDao.deleteByIds(ids);
+        if(count3 != ids.length){
+            flag = false;
+        }
+        return flag;
     }
 }
