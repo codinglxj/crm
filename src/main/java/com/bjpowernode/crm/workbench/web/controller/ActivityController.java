@@ -113,5 +113,38 @@ public class ActivityController {
 
     }
 
+    @RequestMapping(value = "/getUserListAndActivity.do")
+    @ResponseBody
+    public Map<String, Object> getUserListAndActivity(String id){
+        System.out.println("id的值：" + id);
+        System.out.println("进入修改市场活动");
+        Map<String, Object> map = activityService.getUserListAndActivity(id);
+
+
+        return map;
+
+    }
+
+    @RequestMapping(value = "/update.do")
+    @ResponseBody
+    public Map<String, Object> doUpdate(HttpServletRequest request, Activity activity) throws ActivityException {
+
+        System.out.println("执行市场活动修改操作");
+
+        //创建当前系统时间
+        String editTime = DateTimeUtil.getSysTime();
+        activity.setEditTime(editTime);
+
+        //创建人：当前登录用户
+        String editBy = ((User) request.getSession().getAttribute("user")).getName();
+        activity.setEditBy(editBy);
+        //调用ActivityService中的业务方法
+        boolean flag = activityService.update(activity);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("success", flag);
+        return map;
+    }
+
 
 }

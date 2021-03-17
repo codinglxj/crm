@@ -1,6 +1,8 @@
 package com.bjpowernode.crm.workbench.service.impl;
 
 import com.bjpowernode.crm.exception.ActivityException;
+import com.bjpowernode.crm.settings.dao.UserDao;
+import com.bjpowernode.crm.settings.domain.User;
 import com.bjpowernode.crm.vo.PaginationVO;
 import com.bjpowernode.crm.workbench.dao.ActivityDao;
 import com.bjpowernode.crm.workbench.dao.ActivityRemarkDao;
@@ -9,6 +11,7 @@ import com.bjpowernode.crm.workbench.service.ActivityService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,7 +27,22 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Resource
     private ActivityRemarkDao activityRemarkDao;
+    @Resource
+    private UserDao userDao;
 
+
+    @Override
+    public Map<String, Object> getUserListAndActivity(String id) {
+        //1.获取userList
+        List<User> userList = userDao.getUserList();
+        //2.获取对应的单条activity
+        Activity activity = activityDao.getActivityById(id);
+        //3.
+        Map<String, Object> map = new HashMap<>();
+        map.put("userList", userList);
+        map.put("a", activity);
+        return map;
+    }
 
     //
     @Override
@@ -70,5 +88,18 @@ public class ActivityServiceImpl implements ActivityService {
             flag = false;
         }
         return flag;
+    }
+
+    @Override
+    public boolean update(Activity activity) throws  ActivityException{
+
+        int count = activityDao.update(activity);
+        System.out.println("修改条数:" + count);
+        if(count == 0){
+            throw new ActivityException("市场活动添加失败");
+        }
+
+        return true;
+
     }
 }
