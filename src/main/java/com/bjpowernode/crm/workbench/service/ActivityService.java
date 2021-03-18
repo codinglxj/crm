@@ -3,7 +3,9 @@ package com.bjpowernode.crm.workbench.service;
 import com.bjpowernode.crm.exception.ActivityException;
 import com.bjpowernode.crm.vo.PaginationVO;
 import com.bjpowernode.crm.workbench.domain.Activity;
+import com.bjpowernode.crm.workbench.domain.ActivityRemark;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -21,4 +23,14 @@ public interface ActivityService {
     boolean delete(String[] ids);
 
     boolean update(Activity activity) throws ActivityException;
+
+    Activity detail(String id);
+
+    List<ActivityRemark> getRemarkListByAId(String activityID);
+
+    boolean deleteRemark(String id);
+
+    boolean saveRemark(ActivityRemark ar);
+
+    boolean updateRemark(ActivityRemark ar);
 }

@@ -7,6 +7,7 @@ import com.bjpowernode.crm.vo.PaginationVO;
 import com.bjpowernode.crm.workbench.dao.ActivityDao;
 import com.bjpowernode.crm.workbench.dao.ActivityRemarkDao;
 import com.bjpowernode.crm.workbench.domain.Activity;
+import com.bjpowernode.crm.workbench.domain.ActivityRemark;
 import com.bjpowernode.crm.workbench.service.ActivityService;
 import org.springframework.stereotype.Service;
 
@@ -48,7 +49,7 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public boolean save(Activity activity) throws ActivityException {
         int count = activityDao.save(activity);
-        if(count != 1){
+        if (count != 1) {
             throw new ActivityException("市场活动添加失败");
         }
         return true;
@@ -79,27 +80,75 @@ public class ActivityServiceImpl implements ActivityService {
 
         //删除备注后，返回受影响的条数(实际删除的数量)
         int count2 = activityRemarkDao.deleteByIds(ids);
-        if(count1 != count2){
+        if (count1 != count2) {
             flag = false;
         }
         //删除市场活动
         int count3 = activityDao.deleteByIds(ids);
-        if(count3 != ids.length){
+        if (count3 != ids.length) {
             flag = false;
         }
         return flag;
     }
 
     @Override
-    public boolean update(Activity activity) throws  ActivityException{
+    public boolean update(Activity activity) throws ActivityException {
 
         int count = activityDao.update(activity);
         System.out.println("修改条数:" + count);
-        if(count == 0){
+        if (count == 0) {
             throw new ActivityException("市场活动添加失败");
         }
 
         return true;
 
+    }
+
+    @Override
+    public Activity detail(String id) {
+
+        Activity ac = activityDao.detail(id);
+        return ac;
+    }
+
+    @Override
+    public List<ActivityRemark> getRemarkListByAId(String activityID) {
+        List<ActivityRemark> list = activityRemarkDao.getRemarkListByAId(activityID);
+        return list;
+    }
+
+    @Override
+    public boolean deleteRemark(String id) {
+        boolean flag = false;
+        int count = activityRemarkDao.deleteRemark(id);
+        if (count == 1) {
+            flag = true;
+        }
+
+        return flag;
+    }
+
+    @Override
+    public boolean saveRemark(ActivityRemark ar) {
+
+        boolean flag = true;
+        int count = activityRemarkDao.saveRemark(ar);
+        if (count != 1) {
+            flag = false;
+        }
+        return flag;
+
+
+    }
+
+    @Override
+    public boolean updateRemark(ActivityRemark ar) {
+
+        boolean flag = true;
+        int count = activityRemarkDao.updateRemark(ar);
+        if(count != 1){
+            flag = false;
+        }
+        return flag;
     }
 }

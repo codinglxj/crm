@@ -4,10 +4,14 @@ import com.bjpowernode.crm.exception.ActivityException;
 import com.bjpowernode.crm.settings.domain.User;
 import com.bjpowernode.crm.settings.service.UserService;
 import com.bjpowernode.crm.utils.DateTimeUtil;
+import com.bjpowernode.crm.utils.UUIDUtil;
 import com.bjpowernode.crm.vo.PaginationVO;
 import com.bjpowernode.crm.workbench.domain.Activity;
+import com.bjpowernode.crm.workbench.domain.ActivityRemark;
 import com.bjpowernode.crm.workbench.service.ActivityService;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.unit.DataUnit;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -30,6 +34,7 @@ public class ActivityController {
 
     @Resource
     private ActivityService activityService;
+
 
     @RequestMapping(value = "/getUserList.do")
     @ResponseBody
@@ -144,6 +149,86 @@ public class ActivityController {
         Map<String, Object> map = new HashMap<>();
         map.put("success", flag);
         return map;
+    }
+
+
+    //详细展示市场活动
+    @RequestMapping(value = "/detail.do")
+    public String detail(HttpServletRequest request){
+        String id = request.getParameter("id");
+        Activity a = activityService.detail(id);
+        request.setAttribute("a", a);
+
+        return "forward:/workbench/activity/detail.jsp";
+    }
+
+    //展示与市场活动有关的备注(remark)
+    @RequestMapping(value = "/getRemarkListByAId.do")
+    @ResponseBody
+    public List<ActivityRemark> getRemarkListByAid(String activityID){
+        List<ActivityRemark> list = activityService.getRemarkListByAId(activityID);
+        return list;
+    }
+
+    //删除市场活动备注信息
+    @RequestMapping(value = "/deleteRemark.do")
+    @ResponseBody
+    public Map<String, Object> deleteRemark(String id){
+        boolean flag = activityService.deleteRemark(id);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("success", flag);
+        return map;
+    }
+
+    //添加新的备注信息
+    @RequestMapping(value = "/saveRemarkBtn.do")
+    @ResponseBody
+    public Map<String, Object> saveRemark(HttpServletRequest request, String activityId, String noteContent){
+        ActivityRemark ar = new ActivityRemark();
+        //使用uuid生成主键
+        String id = UUIDUtil.getUUID();
+        //创建时间
+        String createTime = DateTimeUtil.getSysTime();
+        //创建人
+        String createBy = ((User)(request.getSession().getAttribute("user"))).getName();
+
+        //
+        String editFlag="0";
+        ar.setId(id);
+        ar.setActivityId(activityId);
+        ar.setNoteContent(noteContent);
+        ar.setCreateTime(createTime);
+        ar.setCreateBy(createBy);
+        ar.setEditFlag(editFlag);
+        boolean flag = activityService.saveRemark(ar);
+        Map<String,Object> map = new HashMap<>();
+        map.put("success", flag);
+        map.put("ar", ar);
+        return map;
+    }
+
+    //修改备注并保存
+    @RequestMapping(value = "/updateRemark.do")
+    @ResponseBody
+    public Map<String, Object> updateRemark(HttpServletRequest request, String id ,String noteContent){
+        ActivityRemark ar = new ActivityRemark();
+        ar.setId(id);
+        ar.setNoteContent(noteContent);
+        String editTime = DateTimeUtil.getSysTime();
+        String editBy = ((User)(request.getSession().getAttribute("user"))).getName();
+        String editFlag = "1";
+        ar.setEditFlag(editFlag);
+        ar.setEditTime(editTime);
+        ar.setEditBy(editBy);
+
+        boolean flag = activityService.updateRemark(ar);
+        Map<String, Object> map = new HashMap<>();
+        map.put("success", flag);
+        map.put("ar", ar);
+        return map;
+
+
     }
 
 
