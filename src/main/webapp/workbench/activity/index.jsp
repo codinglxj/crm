@@ -151,7 +151,7 @@
                  alert(123)
              })*/
 
-            /*动态生成的元素，是不能以普通绑定事件的形 式来进行操作的
+            /*动态生成的元素，是不能以普通绑定事件的形式来进行操作的
             语法:
                 $(需要绑定元素的有效的外层元素).on(绑定事件的方式，需要绑定元素的jquery对象，回调函数)*/
             $("#activityBody").on("click", $("input[name='xu']"), function () {
@@ -364,7 +364,7 @@
                     });
                     $("#activityBody").html(html);
                     var totalPages = Math.ceil(data.total / pageSize);
-                    //计算总也是
+                    //计算总页数
 
                     //数据处理完毕后，结合分页查询，对前端展现分页信息
                     $("#activityPage").bs_pagination({
@@ -388,6 +388,7 @@
 
                 }
             })
+
         }
 
     </script>
@@ -621,7 +622,7 @@
                 <%--<tr class="active">
                     <td><input type="checkbox"/></td>
                     <td><a style="text-decoration: none; cursor: pointer;"
-                           onclick="window.location.href='detail.html';">发传单</a></td>
+                           onclick="window.location.href='detail.jsp';">发传单</a></td>
                     <td>zhangsan</td>
                     <td>2020-10-10</td>
                     <td>2020-10-20</td>
@@ -629,7 +630,7 @@
                 <tr class="active">
                     <td><input type="checkbox"/></td>
                     <td><a style="text-decoration: none; cursor: pointer;"
-                           onclick="window.location.href='detail.html';">发传单</a></td>
+                           onclick="window.location.href='detail.jsp';">发传单</a></td>
                     <td>zhangsan</td>
                     <td>2020-10-10</td>
                     <td>2020-10-20</td>

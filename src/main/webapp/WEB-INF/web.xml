@@ -74,5 +74,12 @@
         <!--<url-pattern>*.do</url-pattern>-->
     </filter-mapping>
 
+    <!--配置servlet原生的监听器,将数据字典放到服务器内存中。-->
+
+    <listener>
+        <listener-class>com.bjpowernode.crm.lisenter.SysInitLisenter</listener-class>
+    </listener>
+
+
 
 </web-app>
