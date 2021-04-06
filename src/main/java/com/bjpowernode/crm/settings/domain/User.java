@@ -122,4 +122,5 @@ public class User {
     public void setEditBy(String editBy) {
         this.editBy = editBy;
     }
+
 }

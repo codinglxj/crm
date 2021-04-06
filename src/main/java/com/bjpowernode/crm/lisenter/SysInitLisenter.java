@@ -7,10 +7,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @authot : lxj
@@ -51,6 +48,23 @@ public class SysInitLisenter implements ServletContextListener {
             servletContext.setAttribute(key,map.get(key));
         }
         System.out.println("服务器缓存处理数据字典结束");
+
+        //数据字典处理完毕后处理Stage2Possibility.properties文件:
+            //解析该配置文件，将配置文件中的键值对解析成java中的键值对，使用map存储，并将map存放到 全局作用域当中
+
+        Map<String, String> pMap = new HashMap<>();
+        ResourceBundle rb = ResourceBundle.getBundle("Stage2Possibility");
+        Enumeration<String> keys = rb.getKeys();
+        while(keys.hasMoreElements()){
+            //阶段
+            String key = keys.nextElement();
+            //可能性
+            String value = rb.getString(key);
+            pMap.put(key, value);
+        }
+
+        servletContext.setAttribute("pMap", pMap);
+
 
     }
 
